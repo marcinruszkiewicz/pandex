@@ -49,9 +49,9 @@ defmodule PandexTest do
 
     ## List
 
-      - one
-      - two
-      - three
+    - one
+    - two
+    - three
     """
 
     assert Pandex.html_to_commonmark(input) == {:ok, output}
@@ -157,11 +157,9 @@ defmodule PandexTest do
     """
 
     output = """
-    \\hypertarget{title}{%
-    \\section{Title}\\label{title}}
+    \\section{Title}\\label{title}
 
-    \\hypertarget{list}{%
-    \\subsection{List}\\label{list}}
+    \\subsection{List}\\label{list}
 
     \\begin{itemize}
     \\item
@@ -196,9 +194,9 @@ defmodule PandexTest do
     api_version = Enum.join(api_version, ",")
 
     output = """
-    {"blocks":[{"t":"Header","c":[1,["title",[],[]],[{"t":"Str","c":"Title"}]]},{"t":"Header","c":[2,["list",[],[]],[{"t":"Str","c":"List"}]]},{"t":"BulletList","c":[[{"t":"Para","c":[{"t":"Str","c":"one"}]}],[{"t":"Para","c":[{"t":"Str","c":"two"}]}],[{"t":"Para","c":[{"t":"Str","c":"three"}]}]]}],"pandoc-api-version":[#{
+    {"pandoc-api-version":[#{
       api_version
-    }],"meta":{}}
+    }],"meta":{},"blocks":[{"t":"Header","c":[1,["title",[],[]],[{"t":"Str","c":"Title"}]]},{"t":"Header","c":[2,["list",[],[]],[{"t":"Str","c":"List"}]]},{"t":"BulletList","c":[[{"t":"Para","c":[{"t":"Str","c":"one"}]}],[{"t":"Para","c":[{"t":"Str","c":"two"}]}],[{"t":"Para","c":[{"t":"Str","c":"three"}]}]]}]}
     """
 
     assert Pandex.latex_to_json(input) == {:ok, output}
@@ -221,9 +219,9 @@ defmodule PandexTest do
     List
     ----
 
-    -  one
-    -  two
-    -  three
+    - one
+    - two
+    - three
     """
 
     assert Pandex.markdown_to_rst(input) == {:ok, output}
@@ -240,12 +238,11 @@ defmodule PandexTest do
     """
 
     output = """
-    {\\pard \\ql \\f0 \\sa180 \\li0 \\fi0 \\b \\fs36 Title\\par}
-    {\\pard \\ql \\f0 \\sa180 \\li0 \\fi0 \\b \\fs32 List\\par}
+    {\\pard \\ql \\f0 \\sa180 \\li0 \\fi0 \\outlinelevel0 \\b \\fs36 Title\\par}
+    {\\pard \\ql \\f0 \\sa180 \\li0 \\fi0 \\outlinelevel1 \\b \\fs32 List\\par}
     {\\pard \\ql \\f0 \\sa0 \\li360 \\fi-360 \\bullet \\tx360\\tab one\\par}
     {\\pard \\ql \\f0 \\sa0 \\li360 \\fi-360 \\bullet \\tx360\\tab two\\par}
     {\\pard \\ql \\f0 \\sa0 \\li360 \\fi-360 \\bullet \\tx360\\tab three\\sa180\\par}
-
     """
 
     assert Pandex.markdown_to_rtf(input) == {:ok, output}
@@ -300,36 +297,9 @@ defmodule PandexTest do
     * one
     * two
     * three
-
     """
 
     assert Pandex.commonmark_to_textile(input) == {:ok, output}
-  end
-
-  test "textile_to_markdown_github" do
-    input = """
-    h1. Title
-
-    h2. List
-
-    * one
-    * two
-    * three
-    """
-
-    output = """
-    Title
-    =====
-
-    List
-    ----
-
-    -   one
-    -   two
-    -   three
-    """
-
-    assert Pandex.textile_to_markdown_github(input) == {:ok, output}
   end
 
   test "textile_to_gfm" do
@@ -348,9 +318,9 @@ defmodule PandexTest do
 
     ## List
 
-      - one
-      - two
-      - three
+    - one
+    - two
+    - three
     """
 
     assert Pandex.textile_to_gfm(input) == {:ok, output}
@@ -368,15 +338,13 @@ defmodule PandexTest do
     """
 
     output = """
-    Title {#title}
-    =====
+    # Title {#title}
 
-    List {#list}
-    ----
+    ## List {#list}
 
-    -   one
-    -   two
-    -   three
+    - one
+    - two
+    - three
     """
 
     assert Pandex.textile_to_markdown_phpextra(input) == {:ok, output}
@@ -496,16 +464,13 @@ defmodule PandexTest do
     """
 
     output = """
-
-
-    TITLE
-
+    Title
 
     List
 
-    -   one
-    -   two
-    -   three
+    - one
+    - two
+    - three
     """
 
     assert Pandex.gfm_to_plain(input) == {:ok, output}
@@ -536,7 +501,8 @@ defmodule PandexTest do
   end
 
   defp get_pandoc_api_version() do
-    get_version(~r/.*pandoc-types\s*(?<version>[0-9][0-9.]*),.*/)
+    # apparently pandoc doesn't list this version anymore in the --version command
+    {:ok, [1,23,1]}
   end
 
   # return version list, e.g. [2, 5]
