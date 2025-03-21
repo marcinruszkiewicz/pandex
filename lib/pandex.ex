@@ -13,14 +13,12 @@ defmodule Pandex do
   | json               | context            |
   | latex              | docbook            |
   | markdown           | dzslides           |
-  | markdown_github *  | gfm                |
   | markdown_mmd       | html               |
   | markdown_phpextra  | html5              |
   | markdown_strict    | json               |
   | rst                | latex              |
   | textile            | man                |
   |                    | markdown           |
-  |                    | markdown_github *  |
   |                    | markdown_mmd       |
   |                    | markdown_phpextra  |
   |                    | markdown_strict    |
@@ -32,10 +30,10 @@ defmodule Pandex do
   |                    | rtf                |
   |                    | s5                 |
   |                    | slidy              |
-  |                    |texinfo             |
+  |                    | texinfo            |
   |                    | textile            |
-
-  `*` Deprecated: `markdown_github`. Use `gfm` instead.
+  |                    | gfm                |
+  |                    | docx               |
 
   # Usage
 
@@ -74,6 +72,7 @@ defmodule Pandex do
     "commonmark",
     "context",
     "docbook",
+    "docx",
     "dzslides",
     "gfm",
     "html",
